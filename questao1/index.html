@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <label for="qtd">Digite um número válido de pessoas:</label>
+            <input type="number" min="0" id="qtd" placeholder="Digite a quantidade...">
+            <button onclick="iniciarCadastro()">Enviar</button>
+        </div>
+        <div id="campoCadastro" style="display: none;">
+            <div class="box" id="pessoasCadastroContainer"></div>
+            <button onclick="calcularPesoIdeal()">Enviar</button>
+        </div>
+        <div id="campoResposta" style="display: none;">
+            <div class="box">
+                <p id="resposta">
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        let pessoa = [];
+
+        function iniciarCadastro() {
+            const qtd = parseInt(document.getElementById('qtd').value);
+            const campoCadastro = document.getElementById('campoCadastro');
+            const pessoasCadastroContainer = document.getElementById('pessoasCadastroContainer');
+
+            if (isNaN(qtd) || qtd <= 0) {
+                alert('Preencha o campo e digite um valor válido')
+                return;
+            }
+            campoCadastro.style.display = 'block';
+            pessoa = [];
+            pessoasCadastroContainer.innerHTML = '';
+
+            for (let i = 0; i < qtd; i++) {
+                pessoasCadastroContainer.innerHTML += `
+                    <h3>Pessoa ${i+1}</h3>
+                    <label for="nome${i}">Nome:</label>
+                    <input type="text" id="nome${i}" placeholder="Digite seu nome...">
+                    <label for="sexo${i}">Selecione o seu sexo:</label>
+                    <select id="sexo${i}">
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                    <label for="altura${i}">Altura:</label>
+                    <input type="number" id="altura${i}" placeholder="Digite sua altura...">
+                `;
+            }
+        }
+        function calcularPesoIdeal() {
+            const qtd = pessoa.length > 0 ? pessoa.length : parseInt(document.getElementById('qtd').value);
+            const campoResposta = document.getElementById('campoResposta')
+            const resposta = document.getElementById('resposta');
+
+            let resultado = ''
+            let mostrarSexo = '';
+            let formula = 0;
+
+            for (let i = 0; i < qtd; i++) {
+                const sexo = document.getElementById(`sexo${i}`).value;
+                const altura = parseFloat(document.getElementById(`altura${i}`).value);
+                const nome = document.getElementById(`nome${i}`).value;
+                if (isNaN(altura) || altura <= 0 || !nome) {
+                    alert('Preencha todos os campos, com valores válidos')
+                    return;
+                }
+
+                if (sexo === 'M') {
+                    formula = (72.7 * altura) - 58;
+                    mostrarSexo= 'Masculino'
+                }else if(sexo === 'F'){
+                    formula = (62.1*altura) -44.7
+                    mostrarSexo = 'Feminino'
+                }
+                pessoa.push({ sexo, altura });
+                resultado += `<h3>Pessoa ${i+1}</h3>Nome: ${nome}<br>Sexo: ${mostrarSexo}<br>Peso ideal: ${formula.toFixed(2)}<br>`
+            }
+            resposta.innerHTML = resultado;
+            campoResposta.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

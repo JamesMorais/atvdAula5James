@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <label for="qtd">Digite a quantidade válida de alunos:</label>
+            <input type="number" id="qtd" placeholder="Digite a quantidade..." min="0">
+            <button onclick="cadastrarAluno()">Enviar</button>
+        </div>
+        <div id="campoCadastro" style="display: none;">
+            <div class="box" id="alunoCadastroContainer">
+            </div>
+            <button onclick="calcularMa()">Enviar</button>
+        </div>
+        <div id="campoResposta" style="display: none;">
+            <div class="box">
+                <p id="resposta"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        let alunos = [];
+        let nmrMatriculas = []
+        function cadastrarAluno() {
+            const qtd = parseInt(document.getElementById('qtd').value);
+            const campoCadastro = document.getElementById('campoCadastro')
+            const alunoCadastroContainer = document.getElementById('alunoCadastroContainer');
+            alunos =[];
+            nmrMatriculas = [];
+
+            if (isNaN(qtd) || qtd <= 0) {
+                alert('Preencha todos os campos, com valores válidos')
+                return;
+            }
+            alunoCadastroContainer.innerHTML = '';
+            campoCadastro.style.display = 'block';
+            for (let i = 0; i < qtd; i++) {
+                alunoCadastroContainer.innerHTML += `
+                    <h3>Aluno ${i + 1}</h3>
+                    <label for="nmr${i}">Número de identificação:</label>
+                    <input type="number" id="nmr${i}" min="0" placeholder="Digite o número...">
+                    <label for="nota1${i}">Nota 1:</label>
+                    <input type="number" id="nota1${i}" min="0" placeholder="Digite a nota...">
+                    <label for="nota2${i}">Nota 2:</label>
+                    <input type="number" id="nota2${i}" min="0" placeholder="Digite a nota...">
+                    <label for="nota3${i}">Nota 3:</label>
+                    <input type="number" id="nota3${i}" min="0" placeholder="Digite a nota...">
+                `;
+            }
+        }
+        function calcularMa() {
+            const qtd = alunos.length > 0 ? alunos.length : parseInt(document.getElementById('qtd').value);
+            const campoResposta = document.getElementById('campoResposta');
+            const resposta = document.getElementById('resposta');
+
+            nmrMatriculas = [];
+            let resultado = '';
+
+            for (let i = 0; i < qtd; i++) {
+                const nmr = parseFloat(document.getElementById(`nmr${i}`).value);
+                const nota1 = parseFloat(document.getElementById(`nota1${i}`).value);
+                const nota2 = parseFloat(document.getElementById(`nota2${i}`).value);
+                const nota3 = parseFloat(document.getElementById(`nota3${i}`).value);
+
+                if (isNaN(nmr) || nmr < 0 || isNaN(nota1) || nota1 < 0 || isNaN(nota2) || nota2 < 0 || isNaN(nota3) || nota3 < 0) {
+                    alert('Preencha todos os campos, com valores válidos')
+                    return;
+                }
+
+                if(nmrMatriculas.includes(nmr)){
+                    alert('Digite um número de indentificação único')
+                    return;
+                }
+                nmrMatriculas.push(nmr)
+                console.log(nmr)
+
+                let me = ((nota1 + nota2 + nota3) / 3).toFixed(1);
+                let ma = ((nota1 + (nota2*2) + (nota3*3) + me) / 7).toFixed(1);
+                let conceito = '';
+                let mensagem= '';
+
+                switch (true) {
+                    case (ma >= 90):
+                        conceito = 'A';
+                        break;
+                    case (ma>=75 && ma<90): 
+                        conceito = 'B';
+                        break;
+                    case (ma>=60 && ma< 75):
+                        conceito = 'C';
+                        break;
+                    case (ma >=40 && ma<60): 
+                        conceito = 'D';
+                        break;
+                    case (ma < 40):
+                        conceito = 'E';
+                        break;
+                    default:
+                        alert('Não foi possível executar o calculo');
+                        break;
+                }
+                if(conceito === 'A' || conceito === 'B' || conceito === 'C'){
+                    mensagem = 'Aprovado';
+                }else{
+                    mensagem = 'Reprovado'
+                }
+                alunos.push({
+                    nmr,
+                    notas: [nota1, nota2, nota3],
+                    me: me,
+                    ma: ma,
+                    conceito: conceito
+                })
+
+
+                resultado += `<h3>Aluno ${i+1}</h3>Número de identificação: ${nmr}<h4>Notas</h4>Nota 1: ${nota1}<br>Nota 2: ${nota2}<br>Nota 3: ${nota3}<br>Média dos Exercícios: ${me}<br>Média de aproveitamento: ${ma}<br>Conceito: ${conceito}<br>${mensagem}`
+            }
+            resposta.innerHTML = resultado;
+            campoResposta.style.display = 'block';
+        }
+
+    </script>
+</body>
+
+</html>

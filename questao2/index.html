@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <label for="qtd">Digite um número válido de pessoas:</label>
+            <input type="number" min="0" id="qtd" placeholder="Digite a quantidade...">
+            <button onclick="iniciarCadastro()">Enviar</button>
+        </div>
+        <div id="campoCadastro" style="display: none;">
+            <div class="box" id="pessoasCadastroContainer"></div>
+            <button onclick="calcularImc()">calcularImc</button>
+        </div>
+        <div class="box" id="caixaResposta" style="display: none;">
+            <p id="resposta"></p>
+        </div>
+    </div>
+    <script>
+        function iniciarCadastro() {
+
+            const qtd = parseInt(document.getElementById('qtd').value);
+            const pessoasCadastroContainer = document.getElementById('pessoasCadastroContainer');
+            const campoCadastro = document.getElementById('campoCadastro');
+
+
+            if (isNaN(qtd) || qtd <= 0) {
+                alert('Preencha o campo e digite um valor válido')
+                return;
+            }
+
+            campoCadastro.style.display = 'block';
+            pessoasCadastroContainer.innerHTML = '';
+
+            for (let i = 0; i < qtd; i++) {
+                pessoasCadastroContainer.innerHTML += `
+                    <h3>Pessoa ${i + 1}</h3>
+                    <label for="nome${i}">Nome:</label>
+                    <input type="text" id="nome${i}" placeholder="Digite seu nome...">
+                    <label for="peso${i}">Peso:</label>
+                    <input type="number" id="peso${i}" placeholder="Digite seu peso...">
+                    <label for="altura${i}">Altura:</label>
+                    <input type="number" id="altura${i}" placeholder="Digite sua altura...">
+                `;
+            }
+
+        }
+        function calcularImc() {
+            const qtd = parseInt(document.getElementById('qtd').value);
+            let resposta = '';
+            const caixaResposta = document.getElementById('caixaResposta');
+
+            for (let i = 0; i < qtd; i++) {
+                const peso = parseFloat(document.getElementById(`peso${i}`).value);
+                const altura = parseFloat(document.getElementById(`altura${i}`).value);
+                const nome = document.getElementById(`nome${i}`).value;
+
+                if (isNaN(peso) || isNaN(altura) || !nome) {
+                    alert('Preencha todos os campos, com valores válidos')
+                    //Lembrar que o return aqui é para não seguir para o switch 
+                    return;
+                }
+                
+                const imc = (peso / (altura * altura)).toFixed(1);
+                console.log(imc)
+
+                let condicao = '';
+                switch (true) {
+                    case (imc < 18.5):
+                        condicao = "Abaixo do peso";
+                        console.log(resposta)
+                        break;
+                    case (imc >= 18.5 && imc < 25):
+                        condicao = "Peso normal";
+                        break;
+                    case (imc >= 25 && imc < 30):
+                        condicao = "Acima do peso";
+                        break;
+                    case (imc >= 30):
+                        condicao = "Obeso";
+                        break;
+                    default:
+                        condicao = "Erro ao calcular IMC";
+                        break;
+                }
+                resposta += `<h3>Pessoa ${i+1}</h3>Nome: ${nome}<br>Peso: ${peso}<br>Condição: ${condicao}<br>`
+                console.log(resposta)
+            }
+
+            document.getElementById('resposta').innerHTML = resposta
+            
+            caixaResposta.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
