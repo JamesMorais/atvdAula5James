@@ -33,7 +33,7 @@
             const qtd = parseInt(document.getElementById('qtd').value);
             const campoCadastro = document.getElementById('campoCadastro')
             const alunoCadastroContainer = document.getElementById('alunoCadastroContainer');
-            alunos =[];
+            alunos = [];
             nmrMatriculas = [];
 
             if (isNaN(qtd) || qtd <= 0) {
@@ -46,7 +46,9 @@
                 alunoCadastroContainer.innerHTML += `
                     <h3>Aluno ${i + 1}</h3>
                     <label for="nmr${i}">Número de identificação:</label>
-                    <input type="number" id="nmr${i}" min="0" placeholder="Digite o número...">
+                    <input type="number" id="nmr${i}" min="0" placeholder="Digite o número..."> 
+                    <label for="me${i}">Digite a Média dos exercícios</label>
+                    <input type="number" id="me${i}" placeholder="Digite a média...">
                     <label for="nota1${i}">Nota 1:</label>
                     <input type="number" id="nota1${i}" min="0" placeholder="Digite a nota...">
                     <label for="nota2${i}">Nota 2:</label>
@@ -61,11 +63,12 @@
             const campoResposta = document.getElementById('campoResposta');
             const resposta = document.getElementById('resposta');
 
-            nmrMatriculas = [];
+
             let resultado = '';
 
             for (let i = 0; i < qtd; i++) {
                 const nmr = parseFloat(document.getElementById(`nmr${i}`).value);
+                const me = parseFloat(document.getElementById(`me${i}`).value);
                 const nota1 = parseFloat(document.getElementById(`nota1${i}`).value);
                 const nota2 = parseFloat(document.getElementById(`nota2${i}`).value);
                 const nota3 = parseFloat(document.getElementById(`nota3${i}`).value);
@@ -75,29 +78,28 @@
                     return;
                 }
 
-                if(nmrMatriculas.includes(nmr)){
+                if (nmrMatriculas.includes(nmr)) {
                     alert('Digite um número de indentificação único')
                     return;
                 }
                 nmrMatriculas.push(nmr)
                 console.log(nmr)
 
-                let me = ((nota1 + nota2 + nota3) / 3).toFixed(1);
-                let ma = ((nota1 + (nota2*2) + (nota3*3) + me) / 7).toFixed(1);
+                let ma = ((nota1 + (nota2 * 2) + (nota3 * 3) + me) / 7).toFixed(1);
                 let conceito = '';
-                let mensagem= '';
+                let mensagem = '';
 
                 switch (true) {
                     case (ma >= 90):
                         conceito = 'A';
                         break;
-                    case (ma>=75 && ma<90): 
+                    case (ma >= 75 && ma < 90):
                         conceito = 'B';
                         break;
-                    case (ma>=60 && ma< 75):
+                    case (ma >= 60 && ma < 75):
                         conceito = 'C';
                         break;
-                    case (ma >=40 && ma<60): 
+                    case (ma >= 40 && ma < 60):
                         conceito = 'D';
                         break;
                     case (ma < 40):
@@ -107,23 +109,24 @@
                         alert('Não foi possível executar o calculo');
                         break;
                 }
-                if(conceito === 'A' || conceito === 'B' || conceito === 'C'){
+                if (conceito === 'A' || conceito === 'B' || conceito === 'C') {
                     mensagem = 'Aprovado';
-                }else{
+                } else {
                     mensagem = 'Reprovado'
                 }
                 alunos.push({
                     nmr,
                     notas: [nota1, nota2, nota3],
-                    me: me,
-                    ma: ma,
-                    conceito: conceito
+                    me,
+                    ma,
+                    conceito,
+                    mensagem,
                 })
-
-
-                resultado += `<h3>Aluno ${i+1}</h3>Número de identificação: ${nmr}<h4>Notas</h4>Nota 1: ${nota1}<br>Nota 2: ${nota2}<br>Nota 3: ${nota3}<br>Média dos Exercícios: ${me}<br>Média de aproveitamento: ${ma}<br>Conceito: ${conceito}<br>${mensagem}`
             }
-            resposta.innerHTML = resultado;
+            for (let j = 0; j < qtd; j++) {
+                resposta.innerHTML += `<h3>Aluno ${j + 1}</h3>Número de identificação: ${alunos[j].nmr}<h4>Notas</h4>Nota 1: ${alunos[j].notas[0]}<br>Nota 2: ${alunos[j].notas[1]}<br>Nota 3: ${alunos[j].notas[2]}<br>Média dos Exercícios: ${alunos[j].me}<br>Média de aproveitamento: ${alunos[j].ma}<br>Conceito: ${alunos[j].conceito}<br>${alunos[j].mensagem}`
+            }
+
             campoResposta.style.display = 'block';
         }
 

@@ -24,6 +24,7 @@
         </div>
     </div>
     <script>
+        let pessoas = []
         function iniciarCadastro() {
 
             const qtd = parseInt(document.getElementById('qtd').value);
@@ -35,6 +36,8 @@
                 alert('Preencha o campo e digite um valor válido')
                 return;
             }
+
+            pessoas = [];
 
             campoCadastro.style.display = 'block';
             pessoasCadastroContainer.innerHTML = '';
@@ -54,8 +57,10 @@
         }
         function calcularImc() {
             const qtd = parseInt(document.getElementById('qtd').value);
-            let resposta = '';
+            const resposta = document.getElementById('resposta');
             const caixaResposta = document.getElementById('caixaResposta');
+
+            resposta.innerHTML = '';
 
             for (let i = 0; i < qtd; i++) {
                 const peso = parseFloat(document.getElementById(`peso${i}`).value);
@@ -67,7 +72,7 @@
                     //Lembrar que o return aqui é para não seguir para o switch 
                     return;
                 }
-                
+
                 const imc = (peso / (altura * altura)).toFixed(1);
                 console.log(imc)
 
@@ -90,12 +95,18 @@
                         condicao = "Erro ao calcular IMC";
                         break;
                 }
-                resposta += `<h3>Pessoa ${i+1}</h3>Nome: ${nome}<br>Peso: ${peso}<br>Condição: ${condicao}<br>`
-                console.log(resposta)
+                pessoas.push({
+                    peso,
+                    nome,
+                    condicao
+                })
             }
 
-            document.getElementById('resposta').innerHTML = resposta
-            
+            for (let j = 0; j < qtd; j++) {
+                resposta.innerHTML += `<h3>Pessoa ${j + 1}</h3>Nome: ${pessoas[j].nome}<br>Peso: ${pessoas[j].peso}<br>Condição: ${pessoas[j].condicao}<br>`
+            }
+
+
             caixaResposta.style.display = 'block';
         }
     </script>

@@ -44,7 +44,7 @@
 
             for (let i = 0; i < qtd; i++) {
                 pessoasCadastroContainer.innerHTML += `
-                    <h3>Pessoa ${i+1}</h3>
+                    <h3>Pessoa ${i + 1}</h3>
                     <label for="nome${i}">Nome:</label>
                     <input type="text" id="nome${i}" placeholder="Digite seu nome...">
                     <label for="sexo${i}">Selecione o seu sexo:</label>
@@ -77,15 +77,18 @@
 
                 if (sexo === 'M') {
                     formula = (72.7 * altura) - 58;
-                    mostrarSexo= 'Masculino'
-                }else if(sexo === 'F'){
-                    formula = (62.1*altura) -44.7
+                    mostrarSexo = 'Masculino'
+                } else if (sexo === 'F') {
+                    formula = (62.1 * altura) - 44.7
                     mostrarSexo = 'Feminino'
                 }
-                pessoa.push({ sexo, altura });
-                resultado += `<h3>Pessoa ${i+1}</h3>Nome: ${nome}<br>Sexo: ${mostrarSexo}<br>Peso ideal: ${formula.toFixed(2)}<br>`
+                pessoa.push({ nome, mostrarSexo, formula });
             }
-            resposta.innerHTML = resultado;
+
+            for (let j = 0; j < qtd; j++) {
+                resposta.innerHTML += `<h3>Pessoa ${j + 1}</h3>Nome: ${pessoa[j].nome}<br>Sexo: ${pessoa[j].mostrarSexo}<br>Peso ideal: ${pessoa[j].formula.toFixed(2)}<br>`
+            }
+
             campoResposta.style.display = 'block';
         }
     </script>
