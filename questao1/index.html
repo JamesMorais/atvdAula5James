@@ -12,7 +12,7 @@
     <div class="container">
         <div class="box">
             <label for="qtd">Digite um número válido de pessoas:</label>
-            <input type="number" min="0" id="qtd" placeholder="Digite a quantidade...">
+            <input type="number" min="1" id="qtd" placeholder="Digite a quantidade...">
             <button onclick="iniciarCadastro()">Enviar</button>
         </div>
         <div id="campoCadastro" style="display: none;">
@@ -62,9 +62,10 @@
             const campoResposta = document.getElementById('campoResposta')
             const resposta = document.getElementById('resposta');
 
-            let resultado = ''
             let mostrarSexo = '';
             let formula = 0;
+
+            resposta.innerHTML = '';
 
             for (let i = 0; i < qtd; i++) {
                 const sexo = document.getElementById(`sexo${i}`).value;
@@ -75,12 +76,18 @@
                     return;
                 }
 
-                if (sexo === 'M') {
-                    formula = (72.7 * altura) - 58;
-                    mostrarSexo = 'Masculino'
-                } else if (sexo === 'F') {
-                    formula = (62.1 * altura) - 44.7
-                    mostrarSexo = 'Feminino'
+                switch (sexo) {
+                    case 'M':
+                        formula = (72.7 * altura) - 58;
+                        mostrarSexo = 'Masculino';
+                        break;
+                    case 'F':
+                        formula = (62.1 * altura) - 44.7;
+                        mostrarSexo = 'Feminino';
+                        break;
+                    default:
+                        alert('Não foi possível calcular o peso ideal');
+                        break;
                 }
                 pessoa.push({ nome, mostrarSexo, formula });
             }

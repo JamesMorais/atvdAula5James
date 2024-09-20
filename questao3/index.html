@@ -12,7 +12,7 @@
     <div class="container">
         <div class="box">
             <label for="qtd">Digite a quantidade válida de alunos:</label>
-            <input type="number" id="qtd" placeholder="Digite a quantidade..." min="0">
+            <input type="number" id="qtd" placeholder="Digite a quantidade..." min="1">
             <button onclick="cadastrarAluno()">Enviar</button>
         </div>
         <div id="campoCadastro" style="display: none;">
@@ -42,6 +42,7 @@
             }
             alunoCadastroContainer.innerHTML = '';
             campoCadastro.style.display = 'block';
+
             for (let i = 0; i < qtd; i++) {
                 alunoCadastroContainer.innerHTML += `
                     <h3>Aluno ${i + 1}</h3>
@@ -59,12 +60,12 @@
             }
         }
         function calcularMa() {
-            const qtd = alunos.length > 0 ? alunos.length : parseInt(document.getElementById('qtd').value);
+            const qtd = parseInt(document.getElementById('qtd').value);
             const campoResposta = document.getElementById('campoResposta');
             const resposta = document.getElementById('resposta');
 
 
-            let resultado = '';
+            resposta.innerHTML = '';
 
             for (let i = 0; i < qtd; i++) {
                 const nmr = parseFloat(document.getElementById(`nmr${i}`).value);
@@ -73,7 +74,7 @@
                 const nota2 = parseFloat(document.getElementById(`nota2${i}`).value);
                 const nota3 = parseFloat(document.getElementById(`nota3${i}`).value);
 
-                if (isNaN(nmr) || nmr < 0 || isNaN(nota1) || nota1 < 0 || isNaN(nota2) || nota2 < 0 || isNaN(nota3) || nota3 < 0) {
+                if (isNaN(nmr) || nmr < 0 || isNaN(nota1) || nota1 < 0 || isNaN(nota2) || nota2 < 0 || isNaN(nota3) || nota3 < 0 || isNaN(me) || me < 0) {
                     alert('Preencha todos os campos, com valores válidos')
                     return;
                 }
@@ -109,11 +110,9 @@
                         alert('Não foi possível executar o calculo');
                         break;
                 }
-                if (conceito === 'A' || conceito === 'B' || conceito === 'C') {
-                    mensagem = 'Aprovado';
-                } else {
-                    mensagem = 'Reprovado'
-                }
+
+                mensagem = (conceito === 'A' || conceito === 'B' || conceito === 'C') ? 'Aprovado' : 'Reprovado';
+
                 alunos.push({
                     nmr,
                     notas: [nota1, nota2, nota3],
